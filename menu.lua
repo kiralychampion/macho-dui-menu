@@ -17,11 +17,13 @@ local function openMenu()
         Citizen.Wait(200)
         send({
             type  = "init",
-            title = "Phaze",
-            index = 1,
+            title = "hazetomika menu",
+            index = 0,
             items = {
-                "Main menu","Player","Server","Weapon","Combat",
-                "Vehicle","Visual","Miscellaneous","Settings","Search"
+                {label="Player", hasSub=true, hint="›"},
+                {label="Vehicle", hasSub=true, hint="›"},
+                {label="Add", hasSub=true, hint="›"},
+                {label="Settings", hasSub=true, hint="›"}
             }
         })
     end
@@ -42,13 +44,13 @@ CreateThread(function()
     while true do
         Wait(0)
 
-        -- Toggle DELETE (178)
+        -- DELETE gomb (178) nyit/zár
         if IsControlJustPressed(0, 178) then
             if visible then closeMenu() else openMenu() end
         end
 
         if visible then
-            -- Figyeljük a nyilakat és az entert (nincs disable!)
+            -- egyszerű nyílvezérlés, nincs input tiltás
             if IsControlJustPressed(0, 172) then send({type="move",  delta=-1}) end -- ↑
             if IsControlJustPressed(0, 173) then send({type="move",  delta=1})  end -- ↓
             if IsControlJustPressed(0, 174) then send({type="closeSub"}) end        -- ←
