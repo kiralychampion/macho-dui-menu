@@ -203,34 +203,47 @@
       setTimeout(()=>d.remove(),1100);
     }
 
-    // Billentyűk (DUI fókuszban)
-    window.addEventListener('keydown', (e)=>{
-      if (e.key === 'ArrowUp')   { e.preventDefault(); move(-1); }
-      if (e.key === 'ArrowDown') { e.preventDefault(); move(+1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); closeSub(); }
-      if (e.key === 'ArrowRight'){ e.preventDefault(); openSub(); }
-      if (e.key === 'Enter' || e.code === 'NumpadEnter'){ e.preventDefault(); confirm(); }
-    });
+<script>
+  /* ... a többi változatlan ... */
 
-    // DUI üzenetek (Lua -> UI)
-    window.addEventListener('message', (event)=>{
-      const data = event.data || {};
-      if (data.type === 'show') { show(); return; }
-      if (data.type === 'hide') { hide(); return; }
-      if (data.type === 'init') {
-        if (data.title) MODEL.title = data.title;
-        if (Array.isArray(data.items)) MODEL.items = data.items;
-        MODEL.index = data.index ?? 0;
-        render(); show(); return;
-      }
-      if (data.type === 'setTitle' && data.title){ MODEL.title = data.title; render(); }
-      if (data.type === 'setItems' && Array.isArray(data.items)){ MODEL.items = data.items; render(); }
-      if (data.type === 'setIndex' && Number.isInteger(data.index)){
-        MODEL.index = Math.max(0, Math.min(MODEL.items.length-1, data.index)); render();
-      }
-    });
+  // ----- KEYS (opcionális, maradhat) -----
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowUp')   { e.preventDefault(); move(-1); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); move(+1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); closeSub(); }
+    if (e.key === 'ArrowRight'){ e.preventDefault(); openSub(); }
+    if (e.key === 'Enter' || e.code === 'NumpadEnter'){ e.preventDefault(); confirm(); }
+  });
 
-    render(); // első render (rejtve marad)
-  </script>
+  // ----- DUI üzenetek (Lua -> UI) -----
+  window.addEventListener('message', (event)=>{
+    const data = event.data || {};
+    if (data.type === 'show') { show(); return; }
+    if (data.type === 'hide') { hide(); return; }
+    if (data.type === 'focus'){ try { window.focus(); menu.focus(); } catch(_){} return; }
+
+    if (data.type === 'init') {
+      if (data.title) MODEL.title = data.title;
+      if (Array.isArray(data.items)) MODEL.items = data.items;
+      MODEL.index = data.index ?? 0;
+      render(); show(); return;
+    }
+
+    if (data.type === 'setTitle' && data.title){ MODEL.title = data.title; render(); }
+    if (data.type === 'setItems' && Array.isArray(data.items)){ MODEL.items = data.items; render(); }
+    if (data.type === 'setIndex' && Number.isInteger(data.index)){
+      MODEL.index = Math.max(0, Math.min(MODEL.items.length-1, data.index)); render();
+    }
+
+    // >>> külső vezérlés Lua-ból
+    if (data.type === 'move' && typeof data.delta === 'number'){ move(data.delta); }
+    if (data.type === 'openSub'){ openSub(); }
+    if (data.type === 'closeSub'){ closeSub(); }
+    if (data.type === 'confirm'){ confirm(); }
+  });
+
+  render(); // első render (rejtve marad)
+</script>
+
 </body>
 </html>
