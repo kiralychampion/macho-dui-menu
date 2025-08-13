@@ -1,4 +1,3 @@
--- Macho DUI Menu Loader (Delete gombbal, nyílvezérlés)
 local dui, visible = nil, false
 local MENU_URL = "https://kiralychampion.github.io/macho-dui-menu/"
 
@@ -42,21 +41,16 @@ end
 CreateThread(function()
     while true do
         Wait(0)
-
-        -- Toggle: DELETE (178)
         if IsControlJustPressed(0, 178) then
             if visible then closeMenu() else openMenu() end
         end
-
         if visible then
-            -- Tiltsuk a játék inputját
-            DisableControlAction(0, 172, true) -- Up
-            DisableControlAction(0, 173, true) -- Down
-            DisableControlAction(0, 174, true) -- Left
-            DisableControlAction(0, 175, true) -- Right
-            DisableControlAction(0, 176, true) -- Enter/Accept
-            DisableControlAction(0, 177, true) -- Back/Cancel
-
+            DisableControlAction(0, 172, true)
+            DisableControlAction(0, 173, true)
+            DisableControlAction(0, 174, true)
+            DisableControlAction(0, 175, true)
+            DisableControlAction(0, 176, true)
+            DisableControlAction(0, 177, true)
             if IsDisabledControlJustPressed(0, 172) then send({type="move",  delta=-1}) end
             if IsDisabledControlJustPressed(0, 173) then send({type="move",  delta=1})  end
             if IsDisabledControlJustPressed(0, 174) then send({type="closeSub"}) end
