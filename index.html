@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Macho DUI Menü</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin: 0; background: transparent; }
+    .menu {
+      width: 520px; margin: 60px; padding: 18px; border-radius: 10px;
+      background: rgba(15,15,20,0.88); color:#fff; backdrop-filter: blur(6px);
+    }
+    .hidden { display:none; }
+    .header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+    .hint{ font-size:12px; opacity:.7; }
+    .list{ list-style:none; padding:0; margin:10px 0 14px; }
+    .list li{ padding:8px 10px; margin-bottom:6px; border-radius:6px; background:rgba(255,255,255,.06); }
+    .buttons{ display:flex; gap:8px; }
+    button{ padding:8px 12px; border:none; border-radius:6px; cursor:pointer; }
+    button:hover{ opacity:.9; }
+    .toast{
+      position:fixed; bottom:24px; left:24px; padding:10px 14px; border-radius:6px;
+      background:rgba(255,255,255,.14); color:#fff;
+    }
+  </style>
+</head>
+<body>
+  <div id="menu" class="menu hidden">
+    <div class="header">
+      <h1 id="title">Macho DUI Menü</h1>
+      <span class="hint">F2: mutat/elrejt (kliensben)</span>
+    </div>
+    <ul id="list" class="list"></ul>
+    <div class="buttons">
+      <button id="btnInventory">Inventory</button>
+      <button id="btnLoadout">Loadout</button>
+      <button id="btnSettings">Settings</button>
+    </div>
+  </div>
+
+  <script>
+    const menu = document.getElementById('menu');
+    const titleEl = document.getElementById('title');
+    const listEl = document.getElementById('list');
+
+    function show(){ menu.classList.remove('hidden'); }
+    function hide(){ menu.classList.add('hidden'); }
+
+    // induláskor rejtve; Lua F2-vel kezeli
+    hide();
+
+    // Lua -> UI
+    window.addEventListener('message', (event) => {
+      const data = event.data || {};
+      if (data.type === 'init') {
+        titleEl.textContent = data.title || 'Macho DUI Menü';
+        listEl.innerHTML = '';
+        (data.items || []).forEach(i => {
+          const li = document.createElement('li'); li.textContent = i; listEl.appendChild(li);
+        });
+        show();
+      }
+      if (data.type === 'setTitle') titleEl.textContent = data.title || titleEl.textContent;
+      if (data.type === 'show') show();
+      if (data.type === 'hide') hide();
+    });
+
+    // Gombok – UI oldali visszajelzés
+    document.getElementById('btnInventory').onclick = () => flash('Inventory megnyitva');
+    document.getElementById('btnLoadout').onclick   = () => flash('Loadout megnyitva');
+    document.getElementById('btnSettings').onclick  = () => flash('Settings megnyitva');
+
+    function flash(msg){
+      const n = document.createElement('div'); n.className='toast'; n.textContent=msg;
+      document.body.appendChild(n); setTimeout(()=>n.remove(), 1200);
+    }
+  </script>
+</body>
+</html>
