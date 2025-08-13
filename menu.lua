@@ -41,22 +41,20 @@ end
 CreateThread(function()
     while true do
         Wait(0)
+
+        -- Toggle DELETE (178)
         if IsControlJustPressed(0, 178) then
             if visible then closeMenu() else openMenu() end
         end
+
         if visible then
-            DisableControlAction(0, 172, true)
-            DisableControlAction(0, 173, true)
-            DisableControlAction(0, 174, true)
-            DisableControlAction(0, 175, true)
-            DisableControlAction(0, 176, true)
-            DisableControlAction(0, 177, true)
-            if IsDisabledControlJustPressed(0, 172) then send({type="move",  delta=-1}) end
-            if IsDisabledControlJustPressed(0, 173) then send({type="move",  delta=1})  end
-            if IsDisabledControlJustPressed(0, 174) then send({type="closeSub"}) end
-            if IsDisabledControlJustPressed(0, 175) then send({type="openSub"})  end
-            if IsDisabledControlJustPressed(0, 176) then send({type="confirm"})  end
-            if IsDisabledControlJustPressed(0, 177) then send({type="closeSub"}) end
+            -- Figyeljük a nyilakat és az entert (nincs disable!)
+            if IsControlJustPressed(0, 172) then send({type="move",  delta=-1}) end -- ↑
+            if IsControlJustPressed(0, 173) then send({type="move",  delta=1})  end -- ↓
+            if IsControlJustPressed(0, 174) then send({type="closeSub"}) end        -- ←
+            if IsControlJustPressed(0, 175) then send({type="openSub"})  end        -- →
+            if IsControlJustPressed(0, 176) then send({type="confirm"})  end        -- Enter
+            if IsControlJustPressed(0, 177) then send({type="closeSub"}) end        -- Back
         end
     end
 end)
