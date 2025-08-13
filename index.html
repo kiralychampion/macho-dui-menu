@@ -11,86 +11,30 @@
       --text: #eaf0ff;
       --muted:#98a6b7;
       --accent:#2a86ff;
-      --accent2:#60a6ff;
       --row:#1a1f27;
       --rowActive: rgba(42,134,255,0.20);
       --border: rgba(255,255,255,0.08);
-      --w: 360px;
-      --row-h: 36px;
-      --r: 10px;
+      --w: 360px; --row-h: 36px; --r: 10px;
       --shadow: 0 14px 40px rgba(0,0,0,.55);
     }
     *{ box-sizing:border-box; user-select:none; -webkit-user-select:none; font-family: Arial, Helvetica, sans-serif; }
     html,body{ margin:0; background:transparent; color:var(--text); }
-
-    /* Dock: jobb oldalt, középen */
-    .dock{
-      position: fixed;
-      right: 36px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: var(--w);
-      max-width: calc(100vw - 40px);
-      border-radius: var(--r);
-      background: var(--panel);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
+    .dock{ position:fixed; right:36px; top:50%; transform:translateY(-50%); width:var(--w); max-width:calc(100vw - 40px); border-radius:var(--r); background:var(--panel); box-shadow:var(--shadow); overflow:hidden; border:1px solid var(--border); }
     .hidden{ display:none !important; }
-
-    .header{
-      height: 64px;
-      padding: 12px 14px;
-      display:flex; align-items:center; justify-content:space-between;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0)),
-        radial-gradient(140px 70px at 85% 0%, rgba(42,134,255,0.35), transparent 70%);
-      border-bottom:1px solid var(--border);
-    }
+    .header{ height:64px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; background:
+      linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0)),
+      radial-gradient(140px 70px at 85% 0%, rgba(42,134,255,0.35), transparent 70%); border-bottom:1px solid var(--border); }
     .brand{ font-size:22px; font-weight:800; letter-spacing:.4px; }
     .subtitle{ font-size:12px; color:var(--muted); }
-
-    .list{
-      background: var(--panel2);
-      padding: 10px;
-      border-bottom:1px solid var(--border);
-    }
-    .row{
-      height: var(--row-h);
-      line-height: var(--row-h);
-      padding: 0 12px;
-      margin-bottom: 6px;
-      border-radius: 6px;
-      background: var(--row);
-      border: 1px solid transparent;
-      display:flex; align-items:center; justify-content:space-between;
-      font-size: 14px;
-      transition: background .12s, border-color .12s, box-shadow .12s;
-    }
+    .list{ background:var(--panel2); padding:10px; border-bottom:1px solid var(--border); }
+    .row{ height:var(--row-h); line-height:var(--row-h); padding:0 12px; margin-bottom:6px; border-radius:6px; background:var(--row); border:1px solid transparent; display:flex; align-items:center; justify-content:space-between; font-size:14px; transition:background .12s, border-color .12s, box-shadow .12s; }
     .row:last-child{ margin-bottom:0; }
     .row .label{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .row .hint{ color:var(--muted); font-size:12px; }
-    .row.active{
-      background: var(--rowActive);
-      border-color: var(--accent);
-      box-shadow: inset 0 0 0 1px rgba(42,134,255,0.25);
-    }
-
-    .footer{
-      padding: 8px 12px;
-      font-size:12px; color:var(--muted);
-      display:flex; align-items:center; justify-content:space-between;
-      background: rgba(255,255,255,0.02);
-    }
-
-    /* Almenü overlay (csak placeholder vizuál) */
-    .overlay{
-      position:absolute; inset:0; background: rgba(12,14,18,0.98);
-      transform: translateX(100%); transition: transform .16s ease-out;
-      display:flex; flex-direction:column;
-    }
-    .overlay.open{ transform: translateX(0); }
+    .row.active{ background:var(--rowActive); border-color:var(--accent); box-shadow: inset 0 0 0 1px rgba(42,134,255,0.25); }
+    .footer{ padding:8px 12px; font-size:12px; color:var(--muted); display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.02); }
+    .overlay{ position:absolute; inset:0; background:rgba(12,14,18,0.98); transform:translateX(100%); transition:transform .16s ease-out; display:flex; flex-direction:column; }
+    .overlay.open{ transform:translateX(0); }
     .ov-head{ padding:12px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; }
     .ov-title{ font-weight:700; }
     .ov-body{ padding:12px; color:var(--muted); }
@@ -102,14 +46,11 @@
       <div class="brand" id="brand">Phaze</div>
       <div class="subtitle">INS: open/close • ↑ ↓ ← → • Enter</div>
     </div>
-
     <div class="list" id="list"></div>
-
     <div class="footer">
       <div id="page">1/9</div>
       <div>↑↓ mozgatás • Enter/→ almenü • ← vissza</div>
     </div>
-
     <div class="overlay" id="overlay">
       <div class="ov-head">
         <div class="ov-title" id="ovTitle">Submenu</div>
@@ -120,7 +61,6 @@
   </div>
 
   <script>
-    // ----- MODEL -----
     const MODEL = {
       title: 'Phaze',
       items: [
@@ -135,11 +75,9 @@
         {label:'Settings', hasSub:true, hint:'›'},
         {label:'Search', hint:'🔎'}
       ],
-      index: 1,
-      submenuOpen: false
+      index: 1, submenuOpen: false
     };
 
-    // ----- DOM -----
     const menu = document.getElementById('menu');
     const list = document.getElementById('list');
     const brand = document.getElementById('brand');
@@ -156,10 +94,7 @@
         const row = document.createElement('div');
         row.className = 'row' + (i===MODEL.index ? ' active':'');
         row.dataset.idx = i;
-        row.innerHTML = `
-          <div class="label">${it.label}</div>
-          <div class="hint">${it.hint||''}</div>
-        `;
+        row.innerHTML = '<div class="label">'+it.label+'</div><div class="hint">'+(it.hint||'')+'</div>';
         list.appendChild(row);
       });
     }
@@ -167,7 +102,6 @@
     function show(){ menu.classList.remove('hidden'); menu.removeAttribute('aria-hidden'); }
     function hide(){ menu.classList.add('hidden'); menu.setAttribute('aria-hidden','true'); }
 
-    // ----- NAV -----
     function move(d){
       if (MODEL.submenuOpen) return;
       const max = MODEL.items.length - 1;
@@ -179,7 +113,7 @@
       if (!it || !it.hasSub) return;
       MODEL.submenuOpen = true;
       ovTitle.textContent = it.label;
-      ovBody.textContent  = `"${it.label}" almenü tartalma (placeholder).`;
+      ovBody.textContent  = '"'+it.label+'" almenü tartalma (placeholder).';
       overlay.classList.add('open');
     }
     function closeSub(){
@@ -189,7 +123,7 @@
     }
     function confirm(){
       const it = normItem(MODEL.items[MODEL.index]);
-      if (it?.hasSub) openSub(); else flash(`"${it?.label||''}" kiválasztva`);
+      if (it && it.hasSub) openSub(); else flash('"'+(it?it.label:'')+'" kiválasztva');
     }
 
     function flash(msg){
@@ -203,47 +137,39 @@
       setTimeout(()=>d.remove(),1100);
     }
 
-<script>
-  /* ... a többi változatlan ... */
+    // (billentyűk itt opcionálisak, maradhatnak)
+    window.addEventListener('keydown', (e)=>{
+      if (e.key === 'ArrowUp')   { e.preventDefault(); move(-1); }
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); closeSub(); }
+      if (e.key === 'ArrowRight'){ e.preventDefault(); openSub(); }
+      if (e.key === 'Enter' || e.code === 'NumpadEnter'){ e.preventDefault(); confirm(); }
+    });
 
-  // ----- KEYS (opcionális, maradhat) -----
-  window.addEventListener('keydown', (e)=>{
-    if (e.key === 'ArrowUp')   { e.preventDefault(); move(-1); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); move(+1); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); closeSub(); }
-    if (e.key === 'ArrowRight'){ e.preventDefault(); openSub(); }
-    if (e.key === 'Enter' || e.code === 'NumpadEnter'){ e.preventDefault(); confirm(); }
-  });
+    // Lua -> UI üzenetek
+    window.addEventListener('message', (event)=>{
+      const data = event.data || {};
+      if (data.type === 'show') { show(); return; }
+      if (data.type === 'hide') { hide(); return; }
+      if (data.type === 'focus'){ try { window.focus(); menu.focus(); } catch(_){} return; }
+      if (data.type === 'init') {
+        if (data.title) MODEL.title = data.title;
+        if (Array.isArray(data.items)) MODEL.items = data.items;
+        MODEL.index = (typeof data.index === 'number') ? data.index : 0;
+        render(); show(); return;
+      }
+      if (data.type === 'setTitle' && data.title){ MODEL.title = data.title; render(); }
+      if (data.type === 'setItems' && Array.isArray(data.items)){ MODEL.items = data.items; render(); }
+      if (data.type === 'setIndex' && Number.isInteger(data.index)){
+        MODEL.index = Math.max(0, Math.min(MODEL.items.length-1, data.index)); render();
+      }
+      if (data.type === 'move' && typeof data.delta === 'number'){ move(data.delta); }
+      if (data.type === 'openSub'){ openSub(); }
+      if (data.type === 'closeSub'){ closeSub(); }
+      if (data.type === 'confirm'){ confirm(); }
+    });
 
-  // ----- DUI üzenetek (Lua -> UI) -----
-  window.addEventListener('message', (event)=>{
-    const data = event.data || {};
-    if (data.type === 'show') { show(); return; }
-    if (data.type === 'hide') { hide(); return; }
-    if (data.type === 'focus'){ try { window.focus(); menu.focus(); } catch(_){} return; }
-
-    if (data.type === 'init') {
-      if (data.title) MODEL.title = data.title;
-      if (Array.isArray(data.items)) MODEL.items = data.items;
-      MODEL.index = data.index ?? 0;
-      render(); show(); return;
-    }
-
-    if (data.type === 'setTitle' && data.title){ MODEL.title = data.title; render(); }
-    if (data.type === 'setItems' && Array.isArray(data.items)){ MODEL.items = data.items; render(); }
-    if (data.type === 'setIndex' && Number.isInteger(data.index)){
-      MODEL.index = Math.max(0, Math.min(MODEL.items.length-1, data.index)); render();
-    }
-
-    // >>> külső vezérlés Lua-ból
-    if (data.type === 'move' && typeof data.delta === 'number'){ move(data.delta); }
-    if (data.type === 'openSub'){ openSub(); }
-    if (data.type === 'closeSub'){ closeSub(); }
-    if (data.type === 'confirm'){ confirm(); }
-  });
-
-  render(); // első render (rejtve marad)
-</script>
-
+    render();
+  </script>
 </body>
 </html>
